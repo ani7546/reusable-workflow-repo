@@ -9,6 +9,9 @@ on:
       ssh_user:
         required: true
         type: string
+    secrets:
+      SSH_PRIVATE_KEY: # Define the secret that will be passed from the caller
+        required: true
 
 jobs:
   deploy:
@@ -23,7 +26,7 @@ jobs:
       with:
         host: ${{ inputs.server_ip }}
         username: ${{ inputs.ssh_user }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}  # Access the SSH key from the secrets
+        key: ${{ secrets.SSH_PRIVATE_KEY }} # Access the secret
         script: |
           mkdir -p ~/github-deployment
           rm -rf ~/github-deployment/*
@@ -34,6 +37,6 @@ jobs:
       with:
         host: ${{ inputs.server_ip }}
         username: ${{ inputs.ssh_user }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}  # Use the SSH key from the secrets
+        key: ${{ secrets.SSH_PRIVATE_KEY }} # Use the secret
         source: .
         target: ~/github-deployment

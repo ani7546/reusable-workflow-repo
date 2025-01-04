@@ -23,7 +23,7 @@ jobs:
       with:
         host: ${{ inputs.server_ip }}
         username: ${{ inputs.ssh_user }}
-        key: ${{ env.SSH_PRIVATE_KEY }}  # Use the SSH key from the environment variable
+        key: ${{ env.SSH_PRIVATE_KEY }}  # Access the SSH key from the environment variable
         script: |
           mkdir -p ~/github-deployment
           rm -rf ~/github-deployment/*

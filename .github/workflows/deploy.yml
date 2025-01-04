@@ -23,7 +23,7 @@ jobs:
       with:
         host: ${{ inputs.server_ip }}
         username: ${{ inputs.ssh_user }}
-        key: ${{ env.SSH_PRIVATE_KEY }}  # Access the SSH key from the environment variable
+        key: ${{ secrets.SSH_PRIVATE_KEY }}  # Access the SSH key from the secrets
         script: |
           mkdir -p ~/github-deployment
           rm -rf ~/github-deployment/*
@@ -34,6 +34,6 @@ jobs:
       with:
         host: ${{ inputs.server_ip }}
         username: ${{ inputs.ssh_user }}
-        key: ${{ env.SSH_PRIVATE_KEY }}  # Use the SSH key from the environment variable
+        key: ${{ secrets.SSH_PRIVATE_KEY }}  # Use the SSH key from the secrets
         source: .
         target: ~/github-deployment

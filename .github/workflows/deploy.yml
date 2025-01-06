@@ -9,6 +9,10 @@ on:
       ssh_user:
         required: true
         type: string
+
+      source:
+         required: true
+         type: string
     secrets:
       SSH_PRIVATE_KEY: 
         required: true
@@ -21,22 +25,11 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    - name: Set up SSH
-      uses: appleboy/ssh-action@v0.1.6
-      with:
-        host: ${{ inputs.server_ip }}
-        username: ${{ inputs.ssh_user }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }} 
-        script: |
-          mkdir -p ~/github-deployment
-          rm -rf ~/github-deployment/*
-          exit
-
     - name: Copy Files to Server
       uses: appleboy/scp-action@v0.1.6
       with:
         host: ${{ inputs.server_ip }}
         username: ${{ inputs.ssh_user }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        source: .
+        source: ${{ inputs.source }}
         target: ~/github-deployment

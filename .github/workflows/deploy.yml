@@ -1,20 +1,21 @@
-name: Reusable Deploy Workflow
+name: AWS Deploy Workflow
 
 on:
   workflow_call:
     inputs:
-      server_ip:
-        required: true
-        type: string
-      ssh_user:
-        required: true
-        type: string
-
       source:
-         required: true
-         type: string
+        required: false
+        type: string
+        default: "." # Default to copying everything from the repository root
+      target:
+        required: true
+        type: string
     secrets:
-      SSH_PRIVATE_KEY: 
+      AWS_PRIVATE_KEY:
+        required: true
+      AWS_IP:
+        required: true
+      AWS_USER:
         required: true
 
 jobs:
@@ -22,14 +23,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+      # Step 1: Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-    - name: Copy Files to Server
-      uses: appleboy/scp-action@v0.1.6
-      with:
-        host: ${{ inputs.server_ip }}
-        username: ${{ inputs.ssh_user }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        source: ${{ inputs.source }}
-        target: ~/github-deployment
+      # Step 2: Copy files to the server
+      - name: Copy Files to Server
+        uses: appleboy/scp-action@v0.1.6
+        with:
+          host: ${{ secrets.AWS_IP }}
+          username: ${{ secrets.AWS_USER }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          source: ${{ inputs.source }}
+          target: ${{ inputs.target }}
